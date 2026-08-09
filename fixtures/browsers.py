@@ -16,7 +16,9 @@ def initialize_browser_state(playwright: Playwright):
     page = context.new_page()
 
     page.goto(
-        "https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/registration"
+        "https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/registration",
+        wait_until="domcontentloaded",
+        timeout=60000,
     )
 
     email_input = page.get_by_test_id("registration-form-email-input").locator("input")
