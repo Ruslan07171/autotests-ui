@@ -1,52 +1,29 @@
-from playwright.sync_api import Page, expect
+import re
+
+from playwright.sync_api import Page
 
 from components.base_component import BaseComponent
+from components.navigation.sidebar_list_item_component import SidebarListItemComponent
 
 
 class SidebarComponent(BaseComponent):
     def __init__(self, page: Page):
         super().__init__(page)
 
-        self.dashboard_list_item_icon = page.get_by_test_id(
-            "dashboard-drawer-list-item-icon"
-        )
-        self.dashboard_list_item_title = page.get_by_test_id(
-            "dashboard-drawer-list-item-title-text"
-        )
-        self.dashboard_list_item_button = page.get_by_test_id(
-            "dashboard-drawer-list-item-button"
-        )
-
-        self.courses_list_item_icon = page.get_by_test_id(
-            "courses-drawer-list-item-icon"
-        )
-        self.courses_list_item_title = page.get_by_test_id(
-            "courses-drawer-list-item-title-text"
-        )
-        self.courses_list_item_button = page.get_by_test_id(
-            "courses-drawer-list-item-button"
-        )
-
-        self.logout_list_item_icon = page.get_by_test_id("logout-drawer-list-item-icon")
-        self.logout_list_item_title = page.get_by_test_id(
-            "logout-drawer-list-item-title-text"
-        )
-        self.logout_list_item_button = page.get_by_test_id(
-            "logout-drawer-list-item-button"
-        )
+        self.dashboard_list_item = SidebarListItemComponent(page, 'dashboard')
+        self.courses_list_item = SidebarListItemComponent(page, 'courses')
+        self.logout_list_item = SidebarListItemComponent(page, 'logout')
 
     def check_visible(self):
-        expect(self.dashboard_list_item_icon).to_be_visible()
-        expect(self.dashboard_list_item_title).to_be_visible()
-        expect(self.dashboard_list_item_title).to_have_text("Dashboard")
-        expect(self.dashboard_list_item_button).to_be_visible()
+        self.dashboard_list_item.check_visible('Dashboard')
+        self.courses_list_item.check_visible('Courses')
+        self.logout_list_item.check_visible('Logout')
 
-        expect(self.courses_list_item_icon).to_be_visible()
-        expect(self.courses_list_item_title).to_be_visible()
-        expect(self.courses_list_item_title).to_have_text("Courses")
-        expect(self.courses_list_item_button).to_be_visible()
+    def click_dashboard(self):
+        self.dashboard_list_item.navigate(re.compile(r'.*/#/dashboard'))
 
-        expect(self.logout_list_item_icon).to_be_visible()
-        expect(self.logout_list_item_title).to_be_visible()
-        expect(self.logout_list_item_title).to_have_text("Logout")
-        expect(self.logout_list_item_button).to_be_visible()
+    def click_courses(self):
+        self.courses_list_item.navigate(re.compile(r'.*/#/courses'))
+
+    def click_logout(self):
+        self.logout_list_item.navigate(re.compile(r'.*/#/auth/login'))
