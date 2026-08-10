@@ -1,4 +1,6 @@
-from playwright.sync_api import Page
+from typing import Pattern
+
+from playwright.sync_api import Page, expect
 
 
 class BasePage:
@@ -6,7 +8,10 @@ class BasePage:
         self.page = page
 
     def visit(self, url: str):
-        self.page.goto(url, wait_until="domcontentloaded")
+        self.page.goto(url, wait_until='domcontentloaded', timeout=60000)
 
     def reload(self):
-        self.page.reload(wait_until="domcontentloaded")
+        self.page.reload(wait_until='domcontentloaded', timeout=60000)
+
+    def check_current_url(self, expected_url: Pattern[str]):
+        expect(self.page).to_have_url(expected_url)
