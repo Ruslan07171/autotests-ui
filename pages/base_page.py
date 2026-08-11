@@ -1,6 +1,11 @@
 from typing import Pattern
 
+import allure
 from playwright.sync_api import Page, expect
+
+from tools.logger import get_logger
+
+logger = get_logger('BASE_PAGE')
 
 
 class BasePage:
@@ -8,10 +13,16 @@ class BasePage:
         self.page = page
 
     def visit(self, url: str):
-        self.page.goto(url, wait_until='domcontentloaded', timeout=60000)
+        with allure.step(f'Opening the url "{url}"'):
+            logger.info(f'Opening the url "{url}"')
+            self.page.goto(url, wait_until='domcontentloaded', timeout=60000)
 
     def reload(self):
-        self.page.reload(wait_until='domcontentloaded', timeout=60000)
+        with allure.step(f'Reloading page with url "{self.page.url}"'):
+            logger.info(f'Reloading page with url "{self.page.url}"')
+            self.page.reload(wait_until='domcontentloaded')
 
     def check_current_url(self, expected_url: Pattern[str]):
-        expect(self.page).to_have_url(expected_url)
+        with allure.step(f'Checking that current url matches pattern "{expected_url.pattern}"'):
+            logger.info(f'Checking that current url matches pattern "{expected_url.pattern}"')
+            expect(self.page).to_have_url(expected_url)
