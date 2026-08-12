@@ -1,8 +1,22 @@
+# pycharm
 .idea
+
+# python
+.venv
 venv
-.venv/
-__pycache__/
+__pycache__
 *.pyc
-tracing/
-videos/
-allure-results/
+.env
+
+# allure
+allure-results
+allure-report
+
+# testing artifacts
+*.html
+*.json
+videos
+tracing
+
+# playwright browsers cache
+.pw-browsers/
