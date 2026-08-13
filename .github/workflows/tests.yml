@@ -11,6 +11,10 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+    env:
+      HEADLESS: 'true'
+      UI_COVERAGE_HTML_REPORT_FILE: './coverage.html'
+      UI_COVERAGE_APPS: '[{"key":"ui-course","url":"https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/login","name":"UI Course","tags":["UI","COURSES"],"repository":"https://github.com/Nikita-Filonov/qa-automation-engineer-ui-course"}]'
 
     steps:
       - name: Check out repository
@@ -42,6 +46,7 @@ jobs:
             coverage-history-
 
       - name: Generate Coverage report
+        if: always()
         run: |
           ui-coverage-tool save-report
 
